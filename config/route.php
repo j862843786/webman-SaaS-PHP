@@ -22,4 +22,4 @@ Route::group('/admin', static function (): void {
     Route::get('/plugins', [app\admin\controller\ExtensionController::class, 'plugins']);
     Route::post('/plugins', [app\admin\controller\ExtensionController::class, 'savePlugin']);
     Route::post('/tenants/{tenantId:\d+}/plugins/{code}', [app\admin\controller\ExtensionController::class, 'enableTenantPlugin']);
-});
+})->middleware([app\middleware\AdminTokenMiddleware::class]);

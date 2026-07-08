@@ -43,3 +43,4 @@ php bin/create-shards.php orders 16
 
 - SaaS 底座设计：[docs/saas-foundation.md](docs/saas-foundation.md)
 - 管理 API 草案：[docs/api.md](docs/api.md)
+- 应用与插件开发约定：[docs/developing-extensions.md](docs/developing-extensions.md)

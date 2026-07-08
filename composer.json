@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "check": "find app config -name '*.php' -print0 | xargs -0 -n1 php -l && php -l start.php && php -l public/index.php && php -l bin/create-shards.php"
+    "check": "find app config bin -name '*.php' -print0 | xargs -0 -n1 php -l && php -l start.php && php -l public/index.php"
   },
   "config": {
     "sort-packages": true
