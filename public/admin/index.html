@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Webman SaaS 管理后台</title>
+  <link rel="stylesheet" href="/admin/assets/app.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">S</span>
+      <div>
+        <strong>Webman SaaS</strong>
+        <small>基础底座管理台</small>
+      </div>
+    </div>
+    <nav>
+      <a href="#dashboard" class="active">概览</a>
+      <a href="#tenants">租户</a>
+      <a href="#extensions">应用与插件</a>
+      <a href="#sharding">分表</a>
+      <a href="#settings">设置</a>
+    </nav>
+  </aside>
+
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <h1>SaaS 基础底座</h1>
+        <p>管理租户、域名、应用与插件；业务应用和插件可按 Provider 契约继续开发。</p>
+      </div>
+      <div class="token-box">
+        <label for="admin-token">Admin Token</label>
+        <input id="admin-token" type="password" placeholder="X-Admin-Token，可为空">
+        <button id="save-token" class="ghost">保存</button>
+      </div>
+    </header>
+
+    <section id="dashboard" class="grid cards">
+      <article class="card accent">
+        <span>当前租户</span>
+        <strong id="tenant-code">-</strong>
+        <small>来自 /health</small>
+      </article>
+      <article class="card">
+        <span>租户数量</span>
+        <strong id="tenant-count">0</strong>
+        <small>已登记租户</small>
+      </article>
+      <article class="card">
+        <span>应用数量</span>
+        <strong id="app-count">0</strong>
+        <small>可启用应用</small>
+      </article>
+      <article class="card">
+        <span>插件数量</span>
+        <strong id="plugin-count">0</strong>
+        <small>可启用插件</small>
+      </article>
+    </section>
+
+    <section id="tenants" class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>租户管理</h2>
+          <p>创建租户后可以绑定域名，也可以用请求头或 query 识别租户。</p>
+        </div>
+        <button id="reload-tenants">刷新</button>
+      </div>
+      <form id="tenant-form" class="form-grid">
+        <input name="code" placeholder="租户编码，例如 acme" required>
+        <input name="name" placeholder="租户名称" required>
+        <input name="plan_code" placeholder="套餐编码，例如 basic">
+        <select name="enabled">
+          <option value="1">启用</option>
+          <option value="0">禁用</option>
+        </select>
+        <button type="submit">创建租户</button>
+      </form>
+      <div class="table-wrap">
+        <table>
+          <thead>
+          <tr><th>ID</th><th>编码</th><th>名称</th><th>套餐</th><th>状态</th><th>域名</th><th>操作</th></tr>
+          </thead>
+          <tbody id="tenant-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="extensions" class="two-col">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>应用</h2>
+            <p>登记后可给租户启用。</p>
+          </div>
+          <button id="reload-apps">刷新</button>
+        </div>
+        <form id="app-form" class="stack-form">
+          <input name="code" placeholder="应用编码" required>
+          <input name="name" placeholder="应用名称" required>
+          <input name="entry_path" placeholder="入口路径，如 app/application/admin" required>
+          <button type="submit">保存应用</button>
+        </form>
+        <ul id="app-list" class="list"></ul>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>插件</h2>
+            <p>登记后可给租户启用。</p>
+          </div>
+          <button id="reload-plugins">刷新</button>
+        </div>
+        <form id="plugin-form" class="stack-form">
+          <input name="code" placeholder="插件编码" required>
+          <input name="name" placeholder="插件名称" required>
+          <input name="version" placeholder="版本，默认 0.1.0">
+          <button type="submit">保存插件</button>
+        </form>
+        <ul id="plugin-list" class="list"></ul>
+      </article>
+    </section>
+
+    <section id="sharding" class="panel">
+      <h2>分表工具</h2>
+      <p>启用 <code>TENANT_SHARDING_ENABLED=true</code> 后，业务表可以使用分桶后缀。后端脚本：</p>
+      <pre>php bin/create-shards.php orders 16</pre>
+      <div class="form-grid small">
+        <input id="shard-table" placeholder="基础表名，例如 orders" value="orders">
+        <input id="shard-modulo" type="number" placeholder="分桶数量" value="16" min="1">
+        <button id="preview-shards">预览 SQL</button>
+      </div>
+      <pre id="shard-preview" class="preview"></pre>
+    </section>
+
+    <section id="settings" class="panel">
+      <h2>后续开发入口</h2>
+      <div class="tips">
+        <p><strong>应用：</strong>实现 <code>app\contract\ApplicationProviderInterface</code>，并配置到 <code>config/app_loader.php</code>。</p>
+        <p><strong>插件：</strong>实现 <code>app\contract\PluginProviderInterface</code>，并配置到 <code>config/plugin_loader.php</code>。</p>
+        <p><strong>租户表：</strong>业务查询使用 <code>app\support\TenantTable::query('表名')</code>，底座会自动处理租户过滤和分表。</p>
+      </div>
+    </section>
+
+    <div id="toast" class="toast" hidden></div>
+  </main>
+
+  <script src="/admin/assets/app.js"></script>
+</body>
+</html>
