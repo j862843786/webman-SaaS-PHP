@@ -17,9 +17,9 @@ Route::group('/admin', static function (): void {
 
     Route::get('/applications', [app\admin\controller\ExtensionController::class, 'applications']);
     Route::post('/applications', [app\admin\controller\ExtensionController::class, 'saveApplication']);
-    Route::post('/tenants/{tenantId:\d+}/applications/{code}', [app\admin\controller\ExtensionController::class, 'enableTenantApplication']);
+    Route::post('/tenants/{tenantId:\d+}/applications/{code:[A-Za-z0-9_-]+}', [app\admin\controller\ExtensionController::class, 'enableTenantApplication']);
 
     Route::get('/plugins', [app\admin\controller\ExtensionController::class, 'plugins']);
     Route::post('/plugins', [app\admin\controller\ExtensionController::class, 'savePlugin']);
-    Route::post('/tenants/{tenantId:\d+}/plugins/{code}', [app\admin\controller\ExtensionController::class, 'enableTenantPlugin']);
+    Route::post('/tenants/{tenantId:\d+}/plugins/{code:[A-Za-z0-9_-]+}', [app\admin\controller\ExtensionController::class, 'enableTenantPlugin']);
 })->middleware([app\middleware\AdminTokenMiddleware::class]);
