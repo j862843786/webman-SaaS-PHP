@@ -62,3 +62,4 @@
 ## 分表 SQL 工具
 
 执行 `php bin/create-shards.php orders 16` 可生成 `orders_00` 到 `orders_15` 的 `CREATE TABLE ... LIKE ...` SQL，用于配合 `TENANT_SHARDING_ENABLED=true`。
+
