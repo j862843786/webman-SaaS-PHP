@@ -63,18 +63,3 @@
 
 执行 `php bin/create-shards.php orders 16` 可生成 `orders_00` 到 `orders_15` 的 `CREATE TABLE ... LIKE ...` SQL，用于配合 `TENANT_SHARDING_ENABLED=true`。
 
-## Redis
-
-底座增加 `config/redis.php` 与 `app\\support\\Redis`，用于缓存租户、插件配置、会话、限流或异步任务状态。默认配置来自 `.env` 中的 `REDIS_HOST`、`REDIS_PORT`、`REDIS_DATABASE`、`REDIS_PREFIX` 等变量。
-
-## 前端工程
-
-管理前端源码位于 `frontend/`，技术栈为 Vue 3、TypeScript、Element Plus、ECharts 和 Tailwind CSS。开发时执行：
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-构建时执行 `npm run build`，产物输出到 `public/admin`，可通过 `/admin/index.html` 访问。

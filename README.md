@@ -7,7 +7,7 @@
 ```bash
 cp .env.example .env
 composer install
-cd frontend && npm install && npm run build && cd ..
+
 mysql < database/migrations/001_saas_foundation.sql
 mysql < database/seeds/001_default_data.sql
 php start.php start
@@ -29,7 +29,7 @@ php start.php start
 - 分表配置：`TENANT_SHARDING_ENABLED` 控制租户业务表是否按桶后缀路由。
 - 租户查询：`app\\support\\TenantTable::query()` 对非公表自动追加 `tenant_id` 条件。
 - 租户管理：提供租户、租户域名、租户应用、租户插件启用接口。
-- Redis 支持：`config/redis.php` 与 `app\support\Redis` 可用于租户配置缓存、限流、会话和任务状态。
+
 - 扩展预留：`applications`、`tenant_applications`、`plugins` 与 `tenant_plugin_settings` 表用于后续多应用和插件管理。
 
 ## 分表 SQL 生成
@@ -46,5 +46,5 @@ php bin/create-shards.php orders 16
 
 - SaaS 底座设计：[docs/saas-foundation.md](docs/saas-foundation.md)
 - 管理 API 草案：[docs/api.md](docs/api.md)
-- 前端工程：`frontend/` 使用 Vue 3 + TypeScript + Element Plus + ECharts + Tailwind CSS，构建产物输出到 `public/admin`。
+
 - 应用与插件开发约定：[docs/developing-extensions.md](docs/developing-extensions.md)
