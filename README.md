@@ -14,6 +14,7 @@ php start.php start
 
 访问：
 
+- `/admin/index.html` 打开 SaaS 管理前端。
 - `GET /` 查看当前租户上下文和扩展配置。
 - `GET /health` 查看健康状态。
 - `GET /admin/tenants` 管理租户。
